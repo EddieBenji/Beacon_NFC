@@ -20,7 +20,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".BeaconActivity"></activity>
+        <activity android:name=".BeaconActivity" />
+        <activity android:name=".DownloadActivity"></activity>
     </application>
 
 </manifest>

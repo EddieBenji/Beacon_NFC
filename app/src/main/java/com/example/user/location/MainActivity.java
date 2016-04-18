@@ -1,11 +1,7 @@
 package com.example.user.location;
 
 import android.Manifest;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -13,17 +9,16 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.TextView;
+
+import com.example.user.location.Utils.NotificationUtils;
 
 public class MainActivity extends AppCompatActivity {
 
     public static final double DISTANCE = 50.0;
-    private boolean isRange;
-    private boolean hasBeenNotifyRange = false;
-    private boolean hasBeenNotifyNotRange = false;
-    Location centro = new Location("");
-    TextView tv;
+    private boolean hasBeenNotify = false;
+    private Location centro = new Location("");
+    private TextView tv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,25 +37,17 @@ public class MainActivity extends AppCompatActivity {
             public void onLocationChanged(Location location) {
                 // Called when a new location is found by the network location provider.
                 double distance = centro.distanceTo(location);
-                Log.d("Tas chao", Double.toString(distance));
+
                 if (distance <= DISTANCE){
-                    isRange = true;
-                    if(hasBeenNotifyRange){
-                        showNotification("Hi everyone", "Estas en FMAT");
-                        hasBeenNotifyRange = true;
-                        hasBeenNotifyNotRange = false;
+
+                    if(hasBeenNotify){
+                        NotificationUtils.showNotification("Hi everyone", "Estas en FMAT, ", BeaconActivity.class, getApplicationContext());
+                        hasBeenNotify = true;
                     }
 
                 }else{
-                    isRange = false;
-                    if(hasBeenNotifyNotRange){
-                        showNotification("Tas Chao", "No estas en FMAT");
-                        hasBeenNotifyNotRange = true;
-                        hasBeenNotifyRange = false;
-                    }
+                    hasBeenNotify = false;
                 }
-
-                if(isRange )
 
                 tv.setText("Latitud : " + location.getLatitude() + " Longitud: " + location.getLongitude() + " Distancia: "+ Double.toString(distance));
             }
@@ -86,26 +73,8 @@ public class MainActivity extends AppCompatActivity {
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
+
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
 
-
-    }
-
-    public void showNotification(String title, String message) {
-        Intent notifyIntent = new Intent(this, BeaconActivity.class);
-        notifyIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivities(this, 0,
-                new Intent[] { notifyIntent }, PendingIntent.FLAG_UPDATE_CURRENT);
-        Notification notification = new Notification.Builder(this)
-                .setSmallIcon(android.R.drawable.ic_dialog_info)
-                .setContentTitle(title)
-                .setContentText(message)
-                .setAutoCancel(true)
-                .setContentIntent(pendingIntent)
-                .build();
-        notification.defaults |= Notification.DEFAULT_SOUND;
-        NotificationManager notificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(1, notification);
     }
 }
