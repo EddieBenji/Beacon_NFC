@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
                 if (distance <= DISTANCE){
 
-                    if(hasBeenNotify){
+                    if(!hasBeenNotify){
                         NotificationUtils.showNotification("Hi everyone", "Estas en FMAT, ", BeaconActivity.class, getApplicationContext());
                         hasBeenNotify = true;
                     }
