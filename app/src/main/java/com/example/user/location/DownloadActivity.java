@@ -31,13 +31,13 @@ public class DownloadActivity extends AppCompatActivity {
 
         adapter = NfcAdapter.getDefaultAdapter(this);
 
-        if(adapter == null){
-            Toast.makeText(this,"Tu teléfono no soporta NFC", Toast.LENGTH_LONG).show();
+        if (adapter == null) {
+            Toast.makeText(this, "Tu teléfono no soporta NFC", Toast.LENGTH_LONG).show();
             finish();
         }
 
-        if(!adapter.isEnabled()){
-            Toast.makeText(this,"No tienes activida tu NFC", Toast.LENGTH_LONG).show();
+        if (!adapter.isEnabled()) {
+            Toast.makeText(this, "No tienes activida tu NFC", Toast.LENGTH_LONG).show();
         }
 
         handleIntent(getIntent());
@@ -110,7 +110,8 @@ public class DownloadActivity extends AppCompatActivity {
         final Intent intent = new Intent(activity.getApplicationContext(), activity.getClass());
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
-        final PendingIntent pendingIntent = PendingIntent.getActivity(activity.getApplicationContext(), 0, intent, 0);
+        final PendingIntent pendingIntent =
+                PendingIntent.getActivity(activity.getApplicationContext(), 0, intent, 0);
 
         IntentFilter[] filters = new IntentFilter[1];
         String[][] techList = new String[][]{};
@@ -136,7 +137,6 @@ public class DownloadActivity extends AppCompatActivity {
      * Background task for reading the data. Do not block the UI thread while reading.
      *
      * @author Ralf Wondratschek
-     *
      */
     private class NdefReaderTask extends AsyncTask<Tag, Void, String> {
 
@@ -154,7 +154,8 @@ public class DownloadActivity extends AppCompatActivity {
 
             NdefRecord[] records = ndefMessage.getRecords();
             for (NdefRecord ndefRecord : records) {
-                if (ndefRecord.getTnf() == NdefRecord.TNF_WELL_KNOWN && Arrays.equals(ndefRecord.getType(), NdefRecord.RTD_TEXT)) {
+                if (ndefRecord.getTnf() == NdefRecord.TNF_WELL_KNOWN &&
+                        Arrays.equals(ndefRecord.getType(), NdefRecord.RTD_TEXT)) {
                     try {
                         return readText(ndefRecord);
                     } catch (UnsupportedEncodingException e) {
@@ -189,7 +190,9 @@ public class DownloadActivity extends AppCompatActivity {
             // e.g. "en"
 
             // Get the Text
-            return new String(payload, languageCodeLength + 1, payload.length - languageCodeLength - 1, textEncoding);
+            return new String(payload, languageCodeLength + 1,
+                    payload.length - languageCodeLength - 1,
+                    textEncoding);
         }
 
         @Override
