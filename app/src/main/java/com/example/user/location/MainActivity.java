@@ -17,14 +17,15 @@ public class MainActivity extends AppCompatActivity {
 
     public static final double DISTANCE = 50.0;
     private boolean hasBeenNotify = false;
-    private Location centro = new Location("");
+    private Location center = new Location("");
     private TextView tv;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        centro.setLatitude(21.048234);
-        centro.setLongitude(-89.644263);
+        center.setLatitude(21.048234);
+        center.setLongitude(-89.644263);
         setContentView(R.layout.activity_main);
 
         tv = (TextView) findViewById(R.id.tv_location);
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         LocationListener locationListener = new LocationListener() {
             public void onLocationChanged(Location location) {
                 // Called when a new location is found by the network location provider.
-                double distance = centro.distanceTo(location);
+                double distance = center.distanceTo(location);
 
                 if (distance <= DISTANCE){
 
@@ -48,8 +49,9 @@ public class MainActivity extends AppCompatActivity {
                 }else{
                     hasBeenNotify = false;
                 }
-
-                tv.setText("Latitud : " + location.getLatitude() + " Longitud: " + location.getLongitude() + " Distancia: "+ Double.toString(distance));
+                tv.setText("Latitude : " + location.getLatitude() +
+                        " Longitude: " + location.getLongitude() +
+                        " Distance: "+ Double.toString(distance));
             }
 
             public void onStatusChanged(String provider, int status, Bundle extras) {
@@ -64,13 +66,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Register the listener with the Location Manager to receive location updates
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return;
         }
 

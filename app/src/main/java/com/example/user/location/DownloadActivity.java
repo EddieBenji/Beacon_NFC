@@ -32,12 +32,12 @@ public class DownloadActivity extends AppCompatActivity {
         adapter = NfcAdapter.getDefaultAdapter(this);
 
         if(adapter == null){
-            Toast.makeText(this,"No soportas NFC NOOOOB", Toast.LENGTH_LONG).show();
+            Toast.makeText(this,"Tu teléfono no soporta NFC", Toast.LENGTH_LONG).show();
             finish();
         }
 
         if(!adapter.isEnabled()){
-            Toast.makeText(this,"No soportas NFC NOOOOB", Toast.LENGTH_LONG).show();
+            Toast.makeText(this,"No tienes activida tu NFC", Toast.LENGTH_LONG).show();
         }
 
         handleIntent(getIntent());
@@ -194,9 +194,9 @@ public class DownloadActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            if (result != null) {
-                //mTextView.setText("Read content: " + result);
-            }
+//            if (result != null) {
+//                mTextView.setText("Read content: " + result);
+//            }
         }
     }
 }

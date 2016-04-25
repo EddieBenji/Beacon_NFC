@@ -27,11 +27,14 @@ public class BeaconActivity extends AppCompatActivity {
             public void onEnteredRegion(Region region, List<Beacon> list) {
                 NotificationUtils.showNotification(
                         "BIENVENIDO AL CC1",
-                        "Listo para descargar la información de la aisgnatura?", DownloadActivity.class, getApplicationContext());
+                        "Listo para descargar la información de la aisgnatura?",
+                        DownloadActivity.class, getApplicationContext());
             }
+
             @Override
             public void onExitedRegion(Region region) {
-                NotificationUtils.showNotification("SALIDA","Nos vemos pronto", MainActivity.class, getApplicationContext());
+                NotificationUtils.showNotification("SALIDA", "Nos vemos pronto",
+                        MainActivity.class, getApplicationContext());
             }
         });
 

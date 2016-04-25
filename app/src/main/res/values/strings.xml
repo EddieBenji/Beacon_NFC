@@ -1,3 +1,6 @@
 <resources>
-    <string name="app_name">Location</string>
+    <string name="app_name">BEACON-NFC</string>
+    <string name="activity_main_title">Cuando estés dentro de la zona permitida, se te notificará</string>
+    <string name="blank_space" > </string>
+    <string name="beacon_activity_title" >Enciende tu Bluetooth, para descargar la información </string>
 </resources>
