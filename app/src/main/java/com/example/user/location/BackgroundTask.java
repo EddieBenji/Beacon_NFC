@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 public class BackgroundTask extends AsyncTask<String, Void, String> {
@@ -35,7 +34,6 @@ public class BackgroundTask extends AsyncTask<String, Void, String> {
     ProgressDialog progressDialog;
 
     public BackgroundTask(Context ctx) {
-
         this.ctx = ctx;
         activity = (Activity) ctx;
     }
@@ -57,9 +55,7 @@ public class BackgroundTask extends AsyncTask<String, Void, String> {
 
         String method = params[0];
 
-        if (method.equals("do_get"))
-
-        {
+        if (method.equals("do_get")) {
             try {
                 URL url = new URL(get_url);
 
@@ -84,9 +80,7 @@ public class BackgroundTask extends AsyncTask<String, Void, String> {
             } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
             }
-
         }
-
         return null;
     }
 
