@@ -37,7 +37,7 @@ public class DownloadActivity extends AppCompatActivity {
         }
 
         if (!adapter.isEnabled()) {
-            Toast.makeText(this, "No tienes activida tu NFC", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "No tienes activado tu NFC", Toast.LENGTH_LONG).show();
         }
 
         handleIntent(getIntent());
@@ -77,7 +77,11 @@ public class DownloadActivity extends AppCompatActivity {
     }
 
     private void handleIntent(Intent intent) {
-        String action = intent.getAction();
+        Toast.makeText(this, "Voy a descargar algo", Toast.LENGTH_LONG).show();
+        BackgroundTask bt = new BackgroundTask(DownloadActivity.this);
+        bt.execute("do_get");
+
+        /*String action = intent.getAction();
         if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
 
             String type = intent.getType();
@@ -102,7 +106,7 @@ public class DownloadActivity extends AppCompatActivity {
                     break;
                 }
             }
-        }
+        }*/
     }
 
 

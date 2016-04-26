@@ -212,7 +212,10 @@
     <string name="abc_shareactionprovider_share_with">Share with</string>
     <string name="abc_shareactionprovider_share_with_application">Share with %s</string>
     <string name="abc_toolbar_collapse_description">Collapse</string>
-    <string name="app_name">Location</string>
+    <string name="activity_main_title">Cuando estés dentro de la zona permitida, se te notificará</string>
+    <string name="app_name">BEACON-NFC</string>
+    <string name="beacon_activity_title">Enciende tu Bluetooth, para descargar la información </string>
+    <string name="blank_space"> </string>
     <string name="error_no_bluetooth_enabled">To use this app you need to turn on Bluetooth</string>
     <string name="error_no_bluetooth_le">This device does not support Bluetooth Low Energy</string>
     <string name="error_no_location_permission">To use this app you need to grant location permission</string>

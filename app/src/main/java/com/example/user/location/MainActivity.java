@@ -9,6 +9,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.example.user.location.Utils.NotificationUtils;
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
                 double distance = center.distanceTo(location);
 
                 if (distance <= DISTANCE){
-
+                    Log.i("Entró if","Dentro de distancia");
                     if(!hasBeenNotify){
                         NotificationUtils.showNotification("Hi everyone", "Estas en FMAT, ", BeaconActivity.class, getApplicationContext());
                         hasBeenNotify = true;
