@@ -12,6 +12,7 @@ import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -66,11 +67,11 @@ public class BackgroundTask extends AsyncTask<String, Void, String> {
                 InputStream inputStream = httpURLConnection.getInputStream();
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
                 StringBuilder stringBuilder = new StringBuilder();
-                String line = "";
+                String line;
 
 
                 while ((line = bufferedReader.readLine()) != null)
-                    stringBuilder.append(line + "\n");
+                    stringBuilder.append(line).append("\n");
 
                 httpURLConnection.disconnect();
                 Thread.sleep(5000);

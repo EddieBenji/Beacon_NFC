@@ -2,6 +2,7 @@ package com.example.user.location;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -17,6 +18,10 @@ import com.example.user.location.Utils.NotificationUtils;
 public class MainActivity extends AppCompatActivity {
 
     public static final double DISTANCE = 50.0;
+    public static final double CENTER_LATITUDE = 21.048234;
+    public static final double CENTER_LONGITUDE = -89.644263;
+    public static double CURRENT_LATITUDE = 0;
+    public static double CURRENT_LONGITUDE = 0, CURRENT_DISTANCE = 0;
     private boolean hasBeenNotify = false;
     private Location center = new Location("");
     private TextView tv;
@@ -25,8 +30,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        center.setLatitude(21.048234);
-        center.setLongitude(-89.644263);
+        center.setLatitude(CENTER_LATITUDE);
+        center.setLongitude(CENTER_LONGITUDE);
         setContentView(R.layout.activity_main);
 
         tv = (TextView) findViewById(R.id.tv_location);
@@ -38,21 +43,31 @@ public class MainActivity extends AppCompatActivity {
         LocationListener locationListener = new LocationListener() {
             public void onLocationChanged(Location location) {
                 // Called when a new location is found by the network location provider.
+                CURRENT_LATITUDE = location.getLatitude();
+                CURRENT_LONGITUDE = location.getLongitude();
                 double distance = center.distanceTo(location);
+                CURRENT_DISTANCE = distance;
 
-                if (distance <= DISTANCE){
-                    Log.i("Entró if","Dentro de distancia");
-                    if(!hasBeenNotify){
+                if (distance <= DISTANCE) {
+                    Log.i("Entró if", "Dentro de distancia");
+                    if (!hasBeenNotify) {
                         NotificationUtils.showNotification("Hi everyone", "Estas en FMAT, ", BeaconActivity.class, getApplicationContext());
                         hasBeenNotify = true;
+
+                        /*We put in the shared preferences, that you are in the location allowed*/
+                        SharedPreferences preferences = getSharedPreferences("app", MODE_PRIVATE);
+                        preferences.edit().putBoolean("Location", true).apply();
                     }
 
-                }else{
+                } else {
                     hasBeenNotify = false;
+                     /*We put in the shared preferences, that you are not in the location allowed*/
+                    SharedPreferences preferences = getSharedPreferences("app", MODE_PRIVATE);
+                    preferences.edit().putBoolean("Location", false).apply();
                 }
                 tv.setText("Latitude : " + location.getLatitude() +
                         " Longitude: " + location.getLongitude() +
-                        " Distance: "+ Double.toString(distance));
+                        " Distance: " + Double.toString(distance));
             }
 
             public void onStatusChanged(String provider, int status, Bundle extras) {

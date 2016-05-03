@@ -1,7 +1,11 @@
 package com.example.user.location;
 
+import android.bluetooth.BluetoothAdapter;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
 import com.estimote.sdk.Beacon;
 import com.estimote.sdk.BeaconManager;
@@ -14,6 +18,8 @@ import java.util.UUID;
 public class BeaconActivity extends AppCompatActivity {
 
     private BeaconManager beaconManager;
+    private final static int REQUEST_ENABLE_BT = 1;
+    private BluetoothAdapter mBluetoothAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,12 +35,20 @@ public class BeaconActivity extends AppCompatActivity {
                         "BIENVENIDO AL CC1",
                         "Listo para descargar la información de la aisgnatura?",
                         DownloadActivity.class, getApplicationContext());
+
+                /*We put in the shared preferences, that you are near to the beacon*/
+                SharedPreferences preferences = getSharedPreferences("app", MODE_PRIVATE);
+                preferences.edit().putBoolean("Beacon", true).apply();
             }
 
             @Override
             public void onExitedRegion(Region region) {
                 NotificationUtils.showNotification("SALIDA", "Nos vemos pronto",
                         MainActivity.class, getApplicationContext());
+
+                /*We put in the shared preferences, that you are far from the beacon*/
+                SharedPreferences preferences = getSharedPreferences("app", MODE_PRIVATE);
+                preferences.edit().putBoolean("Beacon", false).apply();
             }
         });
 
@@ -47,5 +61,17 @@ public class BeaconActivity extends AppCompatActivity {
                         63463, 21120));
             }
         });
+
+        //Validations for the bluetooth:
+        this.mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (mBluetoothAdapter == null) {
+            Toast.makeText(getApplicationContext(), "Tu dispositivo no soporta bluetooth",
+                    Toast.LENGTH_LONG).show();
+        }
+
+        if (!mBluetoothAdapter.isEnabled()) {
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+        }
     }
 }

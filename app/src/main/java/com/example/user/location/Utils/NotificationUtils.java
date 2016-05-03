@@ -11,8 +11,10 @@ public class NotificationUtils {
     public static void showNotification(String title, String message, Class<?> cls, Context context) {
         Intent notifyIntent = new Intent(context, cls);
         notifyIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
         PendingIntent pendingIntent = PendingIntent.getActivities(context, 0,
                 new Intent[]{notifyIntent}, PendingIntent.FLAG_UPDATE_CURRENT);
+
         Notification notification = new Notification.Builder(context)
                 .setSmallIcon(android.R.drawable.ic_dialog_info)
                 .setContentTitle(title)
@@ -20,9 +22,11 @@ public class NotificationUtils {
                 .setAutoCancel(true)
                 .setContentIntent(pendingIntent)
                 .build();
+
         notification.defaults |= Notification.DEFAULT_SOUND;
         NotificationManager notificationManager =
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
         notificationManager.notify(1, notification);
     }
 

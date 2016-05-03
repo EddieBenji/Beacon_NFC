@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.location.Location;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
@@ -13,6 +15,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.UnsupportedEncodingException;
@@ -23,6 +26,8 @@ public class DownloadActivity extends AppCompatActivity {
     public static final String MIME_TEXT_PLAIN = "text/plain";
     public static final String TAG = "NfcDemo";
     private NfcAdapter adapter;
+    private Location center = new Location("");
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +43,10 @@ public class DownloadActivity extends AppCompatActivity {
 
         if (!adapter.isEnabled()) {
             Toast.makeText(this, "No tienes activado tu NFC", Toast.LENGTH_LONG).show();
+        } else {
+            Log.i("Si está activado", "Va a descargar");
+            handleIntent(getIntent());
         }
-
-        handleIntent(getIntent());
     }
 
     @Override
@@ -73,18 +79,29 @@ public class DownloadActivity extends AppCompatActivity {
          *
          * In our case this method gets called, when the user attaches a Tag to the device.
          */
-        handleIntent(intent);
+        if (adapter != null && adapter.isEnabled()) {
+            handleIntent(intent);
+        }
     }
 
     private void handleIntent(Intent intent) {
-        Toast.makeText(this, "Voy a descargar algo", Toast.LENGTH_LONG).show();
-        BackgroundTask bt = new BackgroundTask(DownloadActivity.this);
-        bt.execute("do_get");
 
-        /*String action = intent.getAction();
+        if (!InPlace()) {
+            finish();
+        }
+
+        String action = intent.getAction();
+
         if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
 
-            String type = intent.getType();
+            Toast.makeText(this, "Voy a descargar algo", Toast.LENGTH_LONG).show();
+            BackgroundTask bt = new BackgroundTask(DownloadActivity.this);
+            bt.execute("do_get");
+            ((TextView) this.findViewById(R.id.jsonDownloaded)).setText("Información descargada con éxito");
+            Toast.makeText(this, "Se ha conectado con éxito al web service",
+                    Toast.LENGTH_SHORT).show();
+
+            /*String type = intent.getType();
             if (MIME_TEXT_PLAIN.equals(type)) {
 
                 Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
@@ -92,7 +109,7 @@ public class DownloadActivity extends AppCompatActivity {
 
             } else {
                 Log.d(TAG, "Wrong mime type: " + type);
-            }
+            }*/
         } else if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(action)) {
 
             // In case we would still use the Tech Discovered Intent
@@ -106,31 +123,40 @@ public class DownloadActivity extends AppCompatActivity {
                     break;
                 }
             }
-        }*/
+        }
+    }
+
+    private boolean InPlace() {
+        SharedPreferences pref = getSharedPreferences("app", MODE_PRIVATE);
+        return pref.getBoolean("Location", false) && pref.getBoolean("Beacon", false);
     }
 
 
     public static void setupForegroundDispatch(final Activity activity, NfcAdapter adapter) {
-        final Intent intent = new Intent(activity.getApplicationContext(), activity.getClass());
-        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        if (adapter != null && adapter.isEnabled()) {
+            final Intent intent = new Intent(activity.getApplicationContext(), activity.getClass());
+            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
-        final PendingIntent pendingIntent =
-                PendingIntent.getActivity(activity.getApplicationContext(), 0, intent, 0);
+            final PendingIntent pendingIntent =
+                    PendingIntent.getActivity(activity.getApplicationContext(), 0, intent, 0);
 
-        IntentFilter[] filters = new IntentFilter[1];
-        String[][] techList = new String[][]{};
+            IntentFilter[] filters = new IntentFilter[1];
+            String[][] techList = new String[][]{};
 
-        // Notice that this is the same filter as in our manifest.
-        filters[0] = new IntentFilter();
-        filters[0].addAction(NfcAdapter.ACTION_NDEF_DISCOVERED);
-        filters[0].addCategory(Intent.CATEGORY_DEFAULT);
-        try {
-            filters[0].addDataType(MIME_TEXT_PLAIN);
-        } catch (IntentFilter.MalformedMimeTypeException e) {
-            throw new RuntimeException("Check your mime type.");
+            // Notice that this is the same filter as in our manifest.
+            filters[0] = new IntentFilter();
+            filters[0].addAction(NfcAdapter.ACTION_NDEF_DISCOVERED);
+            filters[0].addCategory(Intent.CATEGORY_DEFAULT);
+            try {
+                filters[0].addDataType(MIME_TEXT_PLAIN);
+            } catch (IntentFilter.MalformedMimeTypeException e) {
+                throw new RuntimeException("Check your mime type.");
+            }
+
+            adapter.enableForegroundDispatch(activity, pendingIntent, filters, techList);
+        } else {
+            Log.i("Not supported", "NFC not supported");
         }
-
-        adapter.enableForegroundDispatch(activity, pendingIntent, filters, techList);
     }
 
     public static void stopForegroundDispatch(final Activity activity, NfcAdapter adapter) {
