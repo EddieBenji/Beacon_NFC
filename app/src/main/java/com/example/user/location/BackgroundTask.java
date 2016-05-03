@@ -33,6 +33,7 @@ public class BackgroundTask extends AsyncTask<String, Void, String> {
     Activity activity;
     AlertDialog.Builder builder;
     ProgressDialog progressDialog;
+    private String jsonInfo = "";
 
     public BackgroundTask(Context ctx) {
         this.ctx = ctx;
@@ -87,8 +88,6 @@ public class BackgroundTask extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onProgressUpdate(Void... values) {
-
-
         super.onProgressUpdate(values);
     }
 
@@ -97,7 +96,8 @@ public class BackgroundTask extends AsyncTask<String, Void, String> {
         try {
             progressDialog.dismiss();
             JSONObject jsonObject = new JSONObject(json);
-            Log.i("JSON: ", jsonObject.toString());
+            this.jsonInfo = jsonObject.toString();
+            Log.i("JSON: ", this.jsonInfo);
 //            JSONArray jsonArray = jsonObject.getJSONArray("title");
 //            JSONObject JO = jsonArray.getJSONObject(0);
 //            String code = JO.getString("code");
@@ -156,5 +156,8 @@ public class BackgroundTask extends AsyncTask<String, Void, String> {
 
     }
 
+    public String getJsonInfo() {
+        return jsonInfo;
+    }
 }
 

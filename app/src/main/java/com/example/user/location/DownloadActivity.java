@@ -84,9 +84,22 @@ public class DownloadActivity extends AppCompatActivity {
         }
     }
 
+    private boolean isInPlace() {
+        SharedPreferences pref = getSharedPreferences("app", MODE_PRIVATE);
+        return pref.getBoolean("Location", false) && pref.getBoolean("Beacon", false);
+    }
+
+    private void downloadJson(){
+        BackgroundTask bt = new BackgroundTask(DownloadActivity.this);
+        bt.execute("do_get");
+        ((TextView) this.findViewById(R.id.jsonDownloaded)).setText(bt.getJsonInfo());
+        Toast.makeText(this, "Se ha conectado con éxito al web service",
+                Toast.LENGTH_SHORT).show();
+    }
+
     private void handleIntent(Intent intent) {
 
-        if (!InPlace()) {
+        if (!isInPlace()) {
             finish();
         }
 
@@ -94,22 +107,18 @@ public class DownloadActivity extends AppCompatActivity {
 
         if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
 
-            Toast.makeText(this, "Voy a descargar algo", Toast.LENGTH_LONG).show();
-            BackgroundTask bt = new BackgroundTask(DownloadActivity.this);
-            bt.execute("do_get");
-            ((TextView) this.findViewById(R.id.jsonDownloaded)).setText("Información descargada con éxito");
-            Toast.makeText(this, "Se ha conectado con éxito al web service",
-                    Toast.LENGTH_SHORT).show();
-
-            /*String type = intent.getType();
+            String type = intent.getType();
             if (MIME_TEXT_PLAIN.equals(type)) {
 
                 Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
                 new NdefReaderTask().execute(tag);
 
+                //Download the json:
+                downloadJson();
+
             } else {
                 Log.d(TAG, "Wrong mime type: " + type);
-            }*/
+            }
         } else if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(action)) {
 
             // In case we would still use the Tech Discovered Intent
@@ -120,16 +129,15 @@ public class DownloadActivity extends AppCompatActivity {
             for (String tech : techList) {
                 if (searchedTech.equals(tech)) {
                     new NdefReaderTask().execute(tag);
+                    //Download the json:
+                    downloadJson();
                     break;
                 }
             }
         }
     }
 
-    private boolean InPlace() {
-        SharedPreferences pref = getSharedPreferences("app", MODE_PRIVATE);
-        return pref.getBoolean("Location", false) && pref.getBoolean("Beacon", false);
-    }
+
 
 
     public static void setupForegroundDispatch(final Activity activity, NfcAdapter adapter) {
