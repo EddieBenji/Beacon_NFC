@@ -10,12 +10,12 @@
     tools:context="com.example.user.location.DownloadActivity">
 
     <TextView
+        android:id="@+id/jsonDownloaded"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
-        android:id="@+id/jsonDownloaded"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="92dp" />
+        android:layout_marginTop="92dp"
+        android:text="@string/download_activity_body"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 </RelativeLayout>

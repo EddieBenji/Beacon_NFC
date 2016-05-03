@@ -12,6 +12,7 @@ import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -33,7 +34,7 @@ public class BackgroundTask extends AsyncTask<String, Void, String> {
     Activity activity;
     AlertDialog.Builder builder;
     ProgressDialog progressDialog;
-    private String jsonInfo = "";
+    private String jsonInfo = "{\"title\":\"javascriptkit.com\",\"link\":\"http:\\/\\/www.javascriptkit.com\",\"description\":\"JavaScript tutorials and over 400+ free scripts!\",\"language\":\"en\",\"items\":[{\"title\":\"Document Text Resizer\",\"link\":\"http:\\/\\/www.javascriptkit.com\\/script\\/script2\\/doctextresizer.shtml\",\"description\":\"This script adds the ability for your users to toggle your webpage's font size, with persistent cookies then used to remember the setting\"},{\"title\":\"JavaScript Reference- Keyboard\\/ Mouse Buttons Events\",\"link\":\"http:\\/\\/www.javascriptkit.com\\/jsref\\/eventkeyboardmouse.shtml\",\"description\":\"The latest update to our JS Reference takes a hard look at keyboard and mouse button events in JavaScript, including the unicode value of each key.\"},{\"title\":\"Dynamically loading an external JavaScript or CSS file\",\"link\":\"http:\\/\\/www.javascriptkit.com\\/javatutors\\/loadjavascriptcss.shtml\",\"description\":\"External JavaScript or CSS files do not always have to be synchronously loaded as part of the page, but dynamically as well. In this tutorial, see how.}";
 
     public BackgroundTask(Context ctx) {
         this.ctx = ctx;
@@ -98,6 +99,7 @@ public class BackgroundTask extends AsyncTask<String, Void, String> {
             JSONObject jsonObject = new JSONObject(json);
             this.jsonInfo = jsonObject.toString();
             Log.i("JSON: ", this.jsonInfo);
+
 //            JSONArray jsonArray = jsonObject.getJSONArray("title");
 //            JSONObject JO = jsonArray.getJSONObject(0);
 //            String code = JO.getString("code");

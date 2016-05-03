@@ -89,10 +89,10 @@ public class DownloadActivity extends AppCompatActivity {
         return pref.getBoolean("Location", false) && pref.getBoolean("Beacon", false);
     }
 
-    private void downloadJson(){
+    private void downloadJson() {
         BackgroundTask bt = new BackgroundTask(DownloadActivity.this);
         bt.execute("do_get");
-        ((TextView) this.findViewById(R.id.jsonDownloaded)).setText(bt.getJsonInfo());
+        ((TextView) this.findViewById(R.id.jsonDownloaded)).setText("Información descargada con éxito");
         Toast.makeText(this, "Se ha conectado con éxito al web service",
                 Toast.LENGTH_SHORT).show();
     }
@@ -100,44 +100,45 @@ public class DownloadActivity extends AppCompatActivity {
     private void handleIntent(Intent intent) {
 
         if (!isInPlace()) {
-            finish();
-        }
+            //finish();
+            Toast.makeText(this, "No puedes descargar la info, ya que no estás dentro de la ubicación o el beacon no está cerca" +
+                    "", Toast.LENGTH_LONG).show();
+        } else {
 
-        String action = intent.getAction();
+            String action = intent.getAction();
 
-        if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
+            if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
 
-            String type = intent.getType();
-            if (MIME_TEXT_PLAIN.equals(type)) {
+                String type = intent.getType();
+                if (MIME_TEXT_PLAIN.equals(type)) {
 
-                Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-                new NdefReaderTask().execute(tag);
-
-                //Download the json:
-                downloadJson();
-
-            } else {
-                Log.d(TAG, "Wrong mime type: " + type);
-            }
-        } else if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(action)) {
-
-            // In case we would still use the Tech Discovered Intent
-            Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-            String[] techList = tag.getTechList();
-            String searchedTech = Ndef.class.getName();
-
-            for (String tech : techList) {
-                if (searchedTech.equals(tech)) {
+                    Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
                     new NdefReaderTask().execute(tag);
+
                     //Download the json:
                     downloadJson();
-                    break;
+
+                } else {
+                    Log.d(TAG, "Wrong mime type: " + type);
+                }
+            } else if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(action)) {
+
+                // In case we would still use the Tech Discovered Intent
+                Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+                String[] techList = tag.getTechList();
+                String searchedTech = Ndef.class.getName();
+
+                for (String tech : techList) {
+                    if (searchedTech.equals(tech)) {
+                        new NdefReaderTask().execute(tag);
+                        //Download the json:
+                        downloadJson();
+                        break;
+                    }
                 }
             }
         }
     }
-
-
 
 
     public static void setupForegroundDispatch(final Activity activity, NfcAdapter adapter) {

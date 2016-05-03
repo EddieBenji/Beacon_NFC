@@ -216,6 +216,7 @@
     <string name="app_name">BEACON-NFC</string>
     <string name="beacon_activity_title">Enciende tu Bluetooth, para descargar la información </string>
     <string name="blank_space"> </string>
+    <string name="download_activity_body">Info a descargar</string>
     <string name="error_no_bluetooth_enabled">To use this app you need to turn on Bluetooth</string>
     <string name="error_no_bluetooth_le">This device does not support Bluetooth Low Energy</string>
     <string name="error_no_location_permission">To use this app you need to grant location permission</string>

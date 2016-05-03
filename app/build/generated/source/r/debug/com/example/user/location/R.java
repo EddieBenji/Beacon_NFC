@@ -1770,15 +1770,16 @@ containing a value of this type.
         public static final int app_name=0x7f060015;
         public static final int beacon_activity_title=0x7f060016;
         public static final int blank_space=0x7f060017;
-        public static final int error_no_bluetooth_enabled=0x7f060018;
-        public static final int error_no_bluetooth_le=0x7f060019;
-        public static final int error_no_location_permission=0x7f06001a;
-        public static final int requesting_location_access=0x7f06001b;
-        public static final int requesting_location_access_cancel=0x7f06001c;
-        public static final int requesting_location_access_ok=0x7f06001d;
-        public static final int requesting_location_access_rationale=0x7f06001e;
-        public static final int requesting_location_permission=0x7f06001f;
-        public static final int requesting_location_permission_rationale=0x7f060020;
+        public static final int download_activity_body=0x7f060018;
+        public static final int error_no_bluetooth_enabled=0x7f060019;
+        public static final int error_no_bluetooth_le=0x7f06001a;
+        public static final int error_no_location_permission=0x7f06001b;
+        public static final int requesting_location_access=0x7f06001c;
+        public static final int requesting_location_access_cancel=0x7f06001d;
+        public static final int requesting_location_access_ok=0x7f06001e;
+        public static final int requesting_location_access_rationale=0x7f06001f;
+        public static final int requesting_location_permission=0x7f060020;
+        public static final int requesting_location_permission_rationale=0x7f060021;
         public static final int status_bar_notification_info_overflow=0x7f060013;
     }
     public static final class style {
